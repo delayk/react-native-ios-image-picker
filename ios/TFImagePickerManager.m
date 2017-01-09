@@ -193,6 +193,8 @@ RCT_EXPORT_METHOD(phoneFromCamera:(NSDictionary *)options callback:(RCTResponseS
         data = UIImageJPEGRepresentation(image, [[self.options valueForKey:@"quality"] floatValue]);
     }
     
+    NSString *base64String = [UIImagePNGRepresentation(data) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    
     // 将图片信息写入文件中
     [data writeToFile:_path atomically:YES];
     NSURL *fileURL = [NSURL fileURLWithPath:_path];
@@ -208,6 +210,7 @@ RCT_EXPORT_METHOD(phoneFromCamera:(NSDictionary *)options callback:(RCTResponseS
     [response setObject:filePath forKey:@"uri"];
     [response setObject:@(image.size.width) forKey:@"width"];
     [response setObject:@(image.size.height) forKey:@"height"];
+    [response setObject:base64String forKey:@"base64String"];
     NSNumber *fileSizeValue = nil;
     NSError *fileSizeError = nil;
     [fileURL getResourceValue:&fileSizeValue forKey:NSURLFileSizeKey error:&fileSizeError];
@@ -243,9 +246,9 @@ RCT_EXPORT_METHOD(phoneFromCamera:(NSDictionary *)options callback:(RCTResponseS
 //  图片保存到系统相册的回调方法
 -(void)image:(UIImage*)image didFinishSavingWithError:(NSError*)error contextInfo:(void*)contextInfo {
     if(!error){
-//        NSLog(@"保存成功");
+        //        NSLog(@"保存成功");
     }else{
-//        NSLog(@"保存失败");
+        //        NSLog(@"保存失败");
     }
 }
 
@@ -288,7 +291,7 @@ RCT_EXPORT_METHOD(phoneFromCamera:(NSDictionary *)options callback:(RCTResponseS
 
 
 - (void)cropCancelNotificationHandler:(NSNotification *)notification {
-//    [_picker takePicture];
+    //    [_picker takePicture];
     [_picker dismissViewControllerAnimated:YES completion:^{
         [[NSNotificationCenter defaultCenter] removeObserver:self name:@"CropOK" object:nil];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:@"CropCancel" object:nil];
@@ -297,7 +300,7 @@ RCT_EXPORT_METHOD(phoneFromCamera:(NSDictionary *)options callback:(RCTResponseS
 }
 
 - (void)cropOKNotificationHandler:(NSNotification *)notification {
-//    notification.object;
+    //    notification.object;
     UIImage *image = (UIImage *)notification.object;
     
     // 创建返回对象
@@ -314,6 +317,7 @@ RCT_EXPORT_METHOD(phoneFromCamera:(NSDictionary *)options callback:(RCTResponseS
     else {
         data = UIImageJPEGRepresentation(image, [[self.options valueForKey:@"quality"] floatValue]);
     }
+    NSString *base64String = [UIImagePNGRepresentation(data) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
     
     // 将图片信息写入文件中
     [data writeToFile:_path atomically:YES];
@@ -330,6 +334,7 @@ RCT_EXPORT_METHOD(phoneFromCamera:(NSDictionary *)options callback:(RCTResponseS
     [response setObject:filePath forKey:@"uri"];
     [response setObject:@(image.size.width) forKey:@"width"];
     [response setObject:@(image.size.height) forKey:@"height"];
+    [response setObject:base64String forKey:@"base64String"];
     NSNumber *fileSizeValue = nil;
     NSError *fileSizeError = nil;
     [fileURL getResourceValue:&fileSizeValue forKey:NSURLFileSizeKey error:&fileSizeError];
