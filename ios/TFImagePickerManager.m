@@ -193,7 +193,8 @@ RCT_EXPORT_METHOD(phoneFromCamera:(NSDictionary *)options callback:(RCTResponseS
         data = UIImageJPEGRepresentation(image, [[self.options valueForKey:@"quality"] floatValue]);
     }
     
-    NSString *base64String = [UIImagePNGRepresentation(data) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    NSString *base64 = [data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    NSLog(@"base64 string: %@", base64);
     
     // 将图片信息写入文件中
     [data writeToFile:_path atomically:YES];
@@ -210,7 +211,7 @@ RCT_EXPORT_METHOD(phoneFromCamera:(NSDictionary *)options callback:(RCTResponseS
     [response setObject:filePath forKey:@"uri"];
     [response setObject:@(image.size.width) forKey:@"width"];
     [response setObject:@(image.size.height) forKey:@"height"];
-    [response setObject:base64String forKey:@"base64String"];
+    [response setObject:base64 forKey:@"base64String"];
     NSNumber *fileSizeValue = nil;
     NSError *fileSizeError = nil;
     [fileURL getResourceValue:&fileSizeValue forKey:NSURLFileSizeKey error:&fileSizeError];
@@ -317,7 +318,8 @@ RCT_EXPORT_METHOD(phoneFromCamera:(NSDictionary *)options callback:(RCTResponseS
     else {
         data = UIImageJPEGRepresentation(image, [[self.options valueForKey:@"quality"] floatValue]);
     }
-    NSString *base64String = [UIImagePNGRepresentation(data) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    NSString *base64 = [data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    NSLog(@"base64 string: %@", base64);
     
     // 将图片信息写入文件中
     [data writeToFile:_path atomically:YES];
@@ -334,7 +336,7 @@ RCT_EXPORT_METHOD(phoneFromCamera:(NSDictionary *)options callback:(RCTResponseS
     [response setObject:filePath forKey:@"uri"];
     [response setObject:@(image.size.width) forKey:@"width"];
     [response setObject:@(image.size.height) forKey:@"height"];
-    [response setObject:base64String forKey:@"base64String"];
+    [response setObject:base64 forKey:@"base64String"];
     NSNumber *fileSizeValue = nil;
     NSError *fileSizeError = nil;
     [fileURL getResourceValue:&fileSizeValue forKey:NSURLFileSizeKey error:&fileSizeError];
